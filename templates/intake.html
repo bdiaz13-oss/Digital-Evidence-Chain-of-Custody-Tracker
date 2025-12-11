@@ -1,0 +1,57 @@
+<!-- templates/intake.html (full overwrite - updated URL for online hash tool) -->
+{% extends 'base.html' %}
+
+{% block title %}Evidence Intake{% endblock %}
+
+{% block content %}
+    <h1>Evidence Intake Form</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.hash_value.label(class="form-label") }}
+            {{ form.hash_value(class="form-control") }}
+            <small class="form-text text-muted">
+                A hash value (e.g., SHA-256) is a unique digital fingerprint of the file, used to verify its integrity over time. It ensures the evidence hasn't been altered. 
+                To compute a hash for a file:
+                <ul>
+                    <li>On Windows: Use PowerShell - Get-FileHash 'path\to\file' -Algorithm SHA256</li>
+                    <li>On macOS/Linux: Use terminal - shasum -a 256 'path/to/file'</li>
+                    <li>In Python: import hashlib; hashlib.sha256(open('file', 'rb').read()).hexdigest()</li>
+                </ul>
+                Paste the resulting hexadecimal string here.
+            </small>
+            <!-- Collapsible help section for online tool -->
+            <div class="mt-2">
+                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#hashHelp" aria-expanded="false" aria-controls="hashHelp">
+                    Need an easier way? Click here for a safe online tool recommendation.
+                </button>
+                <div class="collapse" id="hashHelp">
+                    <div class="card card-body">
+                        For a simple, reliable, and free online tool that computes SHA-256 hashes client-side (no file upload to servers, keeping your data safe), use: <a href="https://emn178.github.io/online-tools/sha256_checksum.html" target="_blank">SHA256 File Checksum - Online Tools</a>.<br>
+                        Steps:
+                        <ol>
+                            <li>Go to the link.</li>
+                            <li>Click "Choose File" and select your file (it processes locally in your browser).</li>
+                            <li>Copy the generated SHA-256 hash.</li>
+                            <li>Paste it into the field above.</li>
+                        </ol>
+                        This tool is open-source and secure for non-sensitive files; for highly sensitive evidence, prefer offline methods like the ones listed above.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            {{ form.source_device.label(class="form-label") }}
+            {{ form.source_device(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.investigator.label(class="form-label") }}
+            {{ form.investigator(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+{% endblock %}

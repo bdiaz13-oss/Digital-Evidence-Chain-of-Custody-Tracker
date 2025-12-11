@@ -1,0 +1,46 @@
+<!-- templates/index.html (full overwrite - added edit button to actions) -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Digital Evidence Chain-of-Custody Tracker</h1>
+    <p>This application simulates logging and tracking digital evidence for forensic investigations.</p>
+    <a href="{{ url_for('intake') }}" class="btn btn-primary mb-4">Add New Evidence</a>
+    <h2>Evidence Items</h2>
+    {% if evidence %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>File Name</th>
+                    <th>Source Device</th>
+                    <th>Initial Investigator</th>
+                    <th>Current Custodian</th>
+                    <th>Timestamp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ev in evidence %}
+                    <tr>
+                        <td>{{ ev.id }}</td>
+                        <td>{{ ev.name }}</td>
+                        <td>{{ ev.source }}</td>
+                        <td>{{ ev.investigator }}</td>
+                        <td>{{ ev.custody_events[-1].to }}</td>
+                        <td>{{ ev.timestamp[:10] }}</td>
+                        <td>
+                            <a href="{{ url_for('transfer', id=ev.id) }}" class="btn btn-sm btn-warning">Transfer</a>
+                            <a href="{{ url_for('verify', id=ev.id) }}" class="btn btn-sm btn-info">Verify</a>
+                            <a href="{{ url_for('edit', id=ev.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ url_for('report', id=ev.id) }}" class="btn btn-sm btn-secondary">Report</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No evidence items yet. Add some using the button above.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+<!-- templates/edit.html (new file - create this in templates/ folder) -->
+{% extends 'base.html' %}
+
+{% block title %}Edit Evidence #{{ evidence.id }}{% endblock %}
+
+{% block content %}
+    <h1>Edit Evidence: {{ evidence.name }}</h1>
+    <p class="text-warning">Note: Editing evidence is logged in the chain-of-custody for audit purposes. Use sparingly to maintain integrity.</p>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.hash_value.label(class="form-label") }}
+            {{ form.hash_value(class="form-control") }}
+            <small class="form-text text-muted">
+                Update the hash if the file has changed (e.g., after authorized modifications). Compute new hash as before.
+            </small>
+        </div>
+        <div class="mb-3">
+            {{ form.source_device.label(class="form-label") }}
+            {{ form.source_device(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.investigator.label(class="form-label") }}
+            {{ form.investigator(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.notes.label(class="form-label") }}
+            {{ form.notes(class="form-control") }}
+            <small class="form-text text-muted">Explain the reason for this edit (required for logging).</small>
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+{% endblock %}

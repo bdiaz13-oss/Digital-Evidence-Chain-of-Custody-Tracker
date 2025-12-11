@@ -1,0 +1,24 @@
+<!-- templates/report.html -->
+{% extends 'base.html' %}
+
+{% block title %}Report for Evidence #{{ evidence.id }}{% endblock %}
+
+{% block content %}
+    <h1>Chain-of-Custody Report: {{ evidence.name }}</h1>
+    <p><strong>ID:</strong> {{ evidence.id }}</p>
+    <p><strong>Source Device:</strong> {{ evidence.source }}</p>
+    <p><strong>Initial Investigator:</strong> {{ evidence.investigator }}</p>
+    <p><strong>Initial Timestamp:</strong> {{ evidence.timestamp }}</p>
+    <p><strong>Stored Hash:</strong> {{ evidence.hash }}</p>
+    <h2>Custody Timeline</h2>
+    <ul class="list-group">
+        {% for event in evidence.custody_events %}
+            <li class="list-group-item">
+                <strong>From:</strong> {{ event.from }} <strong>To:</strong> {{ event.to }}<br>
+                <strong>Timestamp:</strong> {{ event.timestamp }}<br>
+                <strong>Notes:</strong> {{ event.notes }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}

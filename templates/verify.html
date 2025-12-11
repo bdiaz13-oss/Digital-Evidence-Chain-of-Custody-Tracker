@@ -1,0 +1,46 @@
+<!-- templates/verify.html (full overwrite - updated URL for online hash tool) -->
+{% extends 'base.html' %}
+
+{% block title %}Verify Evidence #{{ evidence.id }}{% endblock %}
+
+{% block content %}
+    <h1>Verify Integrity: {{ evidence.name }}</h1>
+    <p>Stored Hash: {{ evidence.hash }}</p>
+    <small class="form-text text-muted mb-3">
+        To verify, upload the file. The app will compute its SHA-256 hash and compare it to the stored value.
+        If you want to compute the hash manually first:
+        <ul>
+            <li>On Windows: Get-FileHash 'path\to\file' -Algorithm SHA256</li>
+            <li>On macOS/Linux: shasum -a 256 'path/to/file'</li>
+            <li>In Python: import hashlib; print(hashlib.sha256(open('file', 'rb').read()).hexdigest())</li>
+        </ul>
+        Compare the result to the stored hash above.
+    </small>
+    <!-- Collapsible help section for online tool -->
+    <div class="mb-3">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#verifyHashHelp" aria-expanded="false" aria-controls="verifyHashHelp">
+            Need an easier way? Click here for a safe online tool recommendation.
+        </button>
+        <div class="collapse" id="verifyHashHelp">
+            <div class="card card-body">
+                For a simple, reliable, and free online tool that computes SHA-256 hashes client-side (no file upload to servers, keeping your data safe), use: <a href="https://emn178.github.io/online-tools/sha256_checksum.html" target="_blank">SHA256 File Checksum - Online Tools</a>.<br>
+                Steps:
+                <ol>
+                    <li>Go to the link.</li>
+                    <li>Click "Choose File" and select your file (it processes locally in your browser).</li>
+                    <li>Copy the generated SHA-256 hash.</li>
+                    <li>Compare it to the stored hash above, or proceed with upload verification.</li>
+                </ol>
+                This tool is open-source and secure for non-sensitive files; for highly sensitive evidence, prefer offline methods like the ones listed above.
+            </div>
+        </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.file.label(class="form-label") }}
+            {{ form.file(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+{% endblock %}

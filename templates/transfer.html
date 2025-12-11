@@ -1,0 +1,21 @@
+<!-- templates/transfer.html -->
+{% extends 'base.html' %}
+
+{% block title %}Transfer Evidence #{{ evidence.id }}{% endblock %}
+
+{% block content %}
+    <h1>Transfer Evidence: {{ evidence.name }}</h1>
+    <p>Current Custodian: {{ evidence.custody_events[-1].to }}</p>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.to_user.label(class="form-label") }}
+            {{ form.to_user(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.notes.label(class="form-label") }}
+            {{ form.notes(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+{% endblock %}

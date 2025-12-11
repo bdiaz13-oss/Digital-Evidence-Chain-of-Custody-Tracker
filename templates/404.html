@@ -1,0 +1,9 @@
+<!-- templates/404.html -->
+{% extends 'base.html' %}
+
+{% block title %}404 - Not Found{% endblock %}
+
+{% block content %}
+    <h1>404 - Page Not Found</h1>
+    <p>The requested page could not be found. Return to the <a href="{{ url_for('index') }}">dashboard</a>.</p>
+{% endblock %}
