@@ -6,7 +6,11 @@
 {% block content %}
     <h1>Welcome to the Digital Evidence Chain-of-Custody Tracker</h1>
     <p>This application simulates logging and tracking digital evidence for forensic investigations.</p>
-    <a href="{{ url_for('intake') }}" class="btn btn-primary mb-4">Add New Evidence</a>
+    <div class="mb-4">
+        <a href="{{ url_for('intake') }}" class="btn btn-primary">Add New Evidence</a>
+        <a href="{{ url_for('export_csv') }}" class="btn btn-success">Export to CSV</a>
+        <a href="{{ url_for('export_pdf') }}" class="btn btn-danger">Export to PDF</a>
+    </div>
     <h2>Evidence Items</h2>
     {% if evidence %}
         <table class="table table-striped">

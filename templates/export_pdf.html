@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Evidence Export Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: white;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+        .custody-chain {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #4CAF50;
+        }
+        .event {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+        @media print {
+            body { margin: 0; }
+            .page-break { page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Digital Evidence Chain-of-Custody Report</h1>
+    <p><strong>Generated:</strong> {{ now.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+    {% if evidence %}
+        <h2>Evidence Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>File Name</th>
+                    <th>Source Device</th>
+                    <th>Investigator</th>
+                    <th>Current Custodian</th>
+                    <th>Timestamp</th>
+                    <th>Events</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ev in evidence %}
+                    <tr>
+                        <td>{{ ev.id }}</td>
+                        <td>{{ ev.name }}</td>
+                        <td>{{ ev.source }}</td>
+                        <td>{{ ev.investigator }}</td>
+                        <td>{{ ev.custody_events[-1].to if ev.custody_events else 'N/A' }}</td>
+                        <td>{{ ev.timestamp[:10] }}</td>
+                        <td>{{ ev.custody_events|length }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Detailed Evidence Records</h2>
+        {% for ev in evidence %}
+            <div class="page-break">
+                <h3>Evidence ID: {{ ev.id }} - {{ ev.name }}</h3>
+                <p><strong>Hash (SHA-256):</strong> {{ ev.hash }}</p>
+                <p><strong>Source Device:</strong> {{ ev.source }}</p>
+                <p><strong>Initial Investigator:</strong> {{ ev.investigator }}</p>
+                <p><strong>Initial Timestamp:</strong> {{ ev.timestamp }}</p>
+
+                <h4>Chain of Custody Events:</h4>
+                <div class="custody-chain">
+                    {% for event in ev.custody_events %}
+                        <div class="event">
+                            <strong>Event {{ loop.index }}:</strong> {{ event.action if event.action else 'Transfer' }}<br>
+                            <strong>From:</strong> {{ event.from }}<br>
+                            <strong>To:</strong> {{ event.to }}<br>
+                            <strong>Timestamp:</strong> {{ event.timestamp }}<br>
+                            <strong>Notes:</strong> {{ event.notes or 'None' }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No evidence items to export.</p>
+    {% endif %}
+
+    <div class="footer">
+        <p>This report can be printed to PDF using your browser's print function (Ctrl+P or Cmd+P).</p>
+        <p>Digital Evidence Chain-of-Custody Tracker</p>
+    </div>
+
+    <script>
+        // Optionally auto-print on load (uncomment to enable)
+        // window.print();
+    </script>
+</body>
+</html>
